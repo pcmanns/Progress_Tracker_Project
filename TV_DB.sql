@@ -3,24 +3,25 @@ CREATE USER 'testuser' IDENTIFIED BY '123';
 USE TV_DB;
 
 CREATE TABLE shows(
-ShowID int,
-ShowName varchar(255),
-Episodes int,
-RunTime int,
+showID int,
+showName varchar(255),
+episodes int,
+runTime int,
 primary key (showID)
 );
 
 CREATE TABLE episodes(
-EpisodesID int,
-EpisodeName varchar(255),
-RunTime int,
-primary key (EpisodesID),
-foreign key (SeasonsID) references seasons(SeasonsID)
+episodesID int,
+episodeName varchar(255),
+runTime int,
+primary key (spisodesID),
+foreign key (seasonsID) references seasons(seasonsID)
 );
 
 CREATE TABLE seasons(
-SeasonsID int,
-RunTime int,
-primary key (SeasonsID),
-foreign key (ShowID) references shows(ShowID)
+seasonsID int,
+runTime int,
+amountOfEpisodes int,
+primary key (seasonsID),
+foreign key (showID) references shows(showID)
 );
