@@ -21,7 +21,7 @@ foreign key (showID) references shows(showID)
 
 CREATE TABLE episodes(
 episodesID int auto_increment,
-episodeName varchar(255),
+episodeName varchar(250),
 runTime int,
 seasonsID int,
 primary key (episodesID),
