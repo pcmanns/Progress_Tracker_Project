@@ -24,13 +24,10 @@ primary key (showID)
 
 CREATE TABLE episodes(
 episodesID int auto_increment,
-<<<<<<< HEAD
 episodeNumber int,
 episodeName varchar(250),
 seasonNumber int,
-=======
 episodeName varchar(255),
->>>>>>> 42117d1de22a9753ac402bd4edb02ee0d26517d2
 runTime int,
 primary key (episodesID),
 foreign key (showID) references shows(showID)
