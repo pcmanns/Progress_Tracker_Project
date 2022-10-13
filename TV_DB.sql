@@ -5,27 +5,31 @@ USE TV_DB;
 CREATE TABLE shows(
 showID int auto_increment,
 showName varchar(255),
-episodes int,
-runTime int,
+episodesTotal int,
+seasonsTotal int,
+runTimeTotal int,
 primary key (showID)
 );
 
-CREATE TABLE seasons(
-seasonsID int auto_increment,
-runTime int,
-amountOfEpisodes int,
-showID int,
-primary key (seasonsID),
-foreign key (showID) references shows(showID)
-);
+-- insert into
+
+-- CREATE TABLE seasons(
+-- seasonsID int auto_increment,
+-- runTime int,
+-- amountOfEpisodes int,
+-- showID int,
+-- primary key (seasonsID),
+-- foreign key (showID) references shows(showID)
+-- );
 
 CREATE TABLE episodes(
 episodesID int auto_increment,
+episodeNumber int,
 episodeName varchar(250),
+seasonNumber int,
 runTime int,
-seasonsID int,
 primary key (episodesID),
-foreign key (seasonsID) references seasons(seasonsID)
+foreign key (showID) references shows(showID)
 );
 
 CREATE TABLE users(
