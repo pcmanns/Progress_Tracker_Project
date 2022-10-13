@@ -48,3 +48,5 @@ usersID int,
 foreign key (showID) references shows(showID),
 foreign key (usersID) references users(usersID)
 );
+
+insert into shows(showName) values ("Naruto")

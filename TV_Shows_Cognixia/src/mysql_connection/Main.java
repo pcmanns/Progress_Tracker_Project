@@ -17,12 +17,12 @@ public class Main {
 		
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from actor");
+			ResultSet rs = stmt.executeQuery("select * from users");
 			
 
 			while(rs.next())
 			{
-				System.out.println("actor_id: " + rs.getInt("actor_id")); 
+				System.out.println("Show Name: " + rs.getString("userName")); 
 			}
 			
 			conn.close();
