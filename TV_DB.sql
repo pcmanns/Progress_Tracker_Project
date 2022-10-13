@@ -21,7 +21,7 @@ foreign key (showID) references shows(showID)
 
 CREATE TABLE episodes(
 episodesID int auto_increment,
-episodeName varchar(250),
+episodeName varchar(255),
 runTime int,
 seasonsID int,
 primary key (episodesID),
@@ -48,5 +48,3 @@ usersID int,
 foreign key (showID) references shows(showID),
 foreign key (usersID) references users(usersID)
 );
-
-insert into shows(showName) values ("Naruto")
