@@ -4,28 +4,17 @@ USE TV_DB;
 
 CREATE TABLE shows(
 showID int auto_increment,
-showName varchar(255),
-episodes int,
-runTime int,
+showName varchar(250),
 primary key (showID)
-);
-
-CREATE TABLE seasons(
-seasonsID int auto_increment,
-runTime int,
-amountOfEpisodes int,
-showID int,
-primary key (seasonsID),
-foreign key (showID) references shows(showID)
 );
 
 CREATE TABLE episodes(
 episodesID int auto_increment,
-episodeName varchar(255),
+episodeName varchar(250),
 runTime int,
-seasonsID int,
+showID int,
 primary key (episodesID),
-foreign key (seasonsID) references seasons(seasonsID)
+foreign key (showID) references shows(showID)
 );
 
 CREATE TABLE users(
@@ -35,10 +24,17 @@ pass varchar(250),
 primary key (usersID)
 );
 
-CREATE TABLE userProgress(
-episodesID int,
+CREATE TABLE inProgress(
+showID int,
 usersID int,
-foreign key (episodesID) references episodes(episodesID),
+foreign key (showID) references shows(showID),
+foreign key (usersID) references users(usersID)
+);
+
+CREATE TABLE completed(
+showID int,
+usersID int,
+foreign key (showID) references shows(showID),
 foreign key (usersID) references users(usersID)
 );
 
@@ -49,8 +45,23 @@ foreign key (showID) references shows(showID),
 foreign key (usersID) references users(usersID)
 );
 
-insert into shows(showName) values ("Naruto");
-insert into shows(showName) values ("She-Hulk");
+insert into shows(showName) 
+values ("Naruto"),("She-Hulk"),("Andor"),("The Rings of Power"),("House of the Dragon"),("Stranger Things"),("Cyberpunk Edgerunners"),("Spongebob Squarepants"),("Rick and Morty"),("The Boys"),("Avatar the Last Airbender");
+
+alter table episodes drop foreign key episodes_ibfk_1;
+alter table episodes add showID int;
+ALTER TABLE episodes ADD FOREIGN KEY (showID) REFERENCES shows(showID) ON DELETE SET NULL;
+alter table episodes drop seasonsID;
+alter table userProgress rename to inProgress;
+drop table seasons;
+alter table shows drop episodes;
+alter table shows drop runTime;
+alter table shows modify showName varchar(250);
+
+alter table inprogress add showID int;
+alter table inprogress drop foreign key inprogress_ibfk_1;
+alter table inprogress add foreign key (showID) references shows(showID) on delete set null;
+alter table inprogress drop episodesID;
 
 insert into users(userName,pass) values ("Chris","root");
 
