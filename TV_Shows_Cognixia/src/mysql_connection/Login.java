@@ -15,7 +15,6 @@ public class Login {
 	
 	System.out.println("Enter Password");
 	LoginInfo[1] = scan.next();
-	scan.close();
 	return LoginInfo;
 	
 

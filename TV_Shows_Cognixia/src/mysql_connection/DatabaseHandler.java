@@ -1,8 +1,10 @@
 package mysql_connection;
 
+import java.sql.Connection;
 //import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 //import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -14,7 +16,7 @@ public class DatabaseHandler {
 		
 			while(rs.next())
 			{
-				showList.add(new Show(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getInt(4),rs.getInt(4)));
+				showList.add(new Show(rs.getInt(1),rs.getString(2)));
 			}
 		
 		} catch (SQLException e) {
@@ -22,21 +24,57 @@ public class DatabaseHandler {
 		}
 		return showList;
 	}
-	
-	public static ArrayList<Episode> getEpisodes(ResultSet rs) {
-		ArrayList<Episode> episodeList= new ArrayList<Episode>();
+
+	public static boolean saveInProgress(ArrayList<Show> list,int userID) {
+		
+		Connection conn = ConnManagerWithProperties.getConnection();
+		
 		try {
-		
-			while(rs.next())
-			{
-				episodeList.add(new Episode(rs.getInt(1),rs.getInt(2),rs.getString(2),rs.getInt(4)));
+			Statement stmt = conn.createStatement();
+			stmt.execute("delete from inProgress where usersId ="+userID);
+			for(Show s : list)	{
+				stmt.execute("insert into inProgress(usersID,showID) values ("+userID+","+s.getShowId()+");");
 			}
-		
+			return true; 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return episodeList;
+		
+		return false;
 	}
-
+	public static boolean savePlanToWatch(ArrayList<Show> list,int userID) {
+		
+		Connection conn = ConnManagerWithProperties.getConnection();
+		
+		try {
+			Statement stmt = conn.createStatement();
+			stmt.execute("delete from planToWatch where usersId ="+userID);
+			for(Show s : list)	{
+				stmt.execute("insert into planToWatch(usersID,showID) values ("+userID+","+s.getShowId()+");");
+			}
+			return true; 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	public static boolean saveComplete(ArrayList<Show> list,int userID) {
+		
+		Connection conn = ConnManagerWithProperties.getConnection();
+		
+		try {
+			Statement stmt = conn.createStatement();
+			stmt.execute("delete from completed where usersId ="+userID);
+			for(Show s : list)	{
+				stmt.execute("insert into completed(usersID,showID) values ("+userID+","+s.getShowId()+");");
+			}
+			return true; 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 
 }

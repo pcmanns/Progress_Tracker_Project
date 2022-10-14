@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
 
@@ -12,34 +14,33 @@ public class Main {
 
 		/* Login */
 		
-		// -------- Temp Code---------------
 		
 		String[] logininfo = Login.userDetails();
-	//	logininfo[0] = "userName";
-	//	logininfo[1] = "pass";
-		
-		// -------- Temp Code---------------
+
 		Users user;
-		
+		ArrayList<Show> ShowList= new ArrayList<Show>();
 		
 		Connection conn = ConnManagerWithProperties.getConnection();
 		
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from users");			
-
+			
 			int id = verifyLogin(rs, logininfo);
+			rs = stmt.executeQuery("select * from shows");
+			ShowList=DatabaseHandler.getShows(rs);
 			
 			//verify login
 			if(id!=-1)
 			{
 				//login phase passed
 				user= new Users(id);
-				System.out.println("login verified");
-				
 				for(Show s : user.getPlanToWatch())	{
 					System.out.println(s.getShowName());
 				}
+				System.out.println("login verified");
+				changeStatus(user,ShowList);
+				
 			}
 			else
 			{
@@ -49,14 +50,43 @@ public class Main {
 			}
 			
 			
-			
-			
 			conn.close();
 			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+	}
+	
+	
+	public static void changeStatus(Users u,ArrayList<Show> ShowList) {
+		for(int i=0; i<ShowList.size();i++)	{
+			Show s = ShowList.get(i);
+			System.out.println(i+". "+s.getShowName());
+		}
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Picked Show Number");
+		int showNum = scan.nextInt();
+		System.out.println("1.Plan to Watch");
+		System.out.println("2.In Progress");
+		System.out.println("3.Complete");
+		System.out.println("Set as:");
+		int c = scan.nextInt();
+		Show show =ShowList.get(showNum);
+		switch(c) {
+			case 1:
+				u.getPlanToWatch().add(show);
+				break;
+			case 2:
+				u.getInprogress().add(show);
+				break;
+			case 3:
+				u.getCompleted().add(show);
+				break;
+		
+		} 
+		u.Save();
 		
 	}
 	
