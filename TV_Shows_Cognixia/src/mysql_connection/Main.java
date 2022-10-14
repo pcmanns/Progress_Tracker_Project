@@ -1,7 +1,6 @@
 package mysql_connection;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,12 +14,12 @@ public class Main {
 		
 		// -------- Temp Code---------------
 		
-		String[] logininfo = new String[2];
-		logininfo[0] = "userName";
-		logininfo[1] = "pass";
+		String[] logininfo = Login.userDetails();
+	//	logininfo[0] = "userName";
+	//	logininfo[1] = "pass";
 		
 		// -------- Temp Code---------------
-
+		Users user;
 		
 		
 		Connection conn = ConnManagerWithProperties.getConnection();
@@ -29,13 +28,18 @@ public class Main {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from users");			
 
-
+			int id = verifyLogin(rs, logininfo);
 			
 			//verify login
-			if(verifyLogin(rs, logininfo))
+			if(id!=-1)
 			{
 				//login phase passed
+				user= new Users(id);
 				System.out.println("login verified");
+				
+				for(Show s : user.getPlanToWatch())	{
+					System.out.println(s.getShowName());
+				}
 			}
 			else
 			{
@@ -57,7 +61,7 @@ public class Main {
 	}
 	
 	
-	public static boolean verifyLogin(ResultSet rs, String[] loginInfo) {
+	public static int verifyLogin(ResultSet rs, String[] loginInfo) {
 		
 		try {
 			while(rs.next())
@@ -66,7 +70,7 @@ public class Main {
 				{
 					if(rs.getString(3).equals(loginInfo[1]))	//if password matches
 					{
-						return true;	
+						return rs.getInt(1);	
 					}
 				}
 			}
@@ -75,7 +79,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		return false;	//no match
+		return -1;	//no match
 	}
 	
 
