@@ -77,12 +77,42 @@ public class Main {
 		switch(c) {
 			case 1:
 				u.getPlanToWatch().add(show);
+				for(int x=0;x<u.getInprogress().size();x++) {
+					if(u.getInprogress().get(x).getShowName().equals(show.getShowName())) {
+						u.getInprogress().remove(x);
+					}
+				}
+				for(int x=0;x<u.getCompleted().size();x++) {
+					if(u.getCompleted().get(x).getShowName().equals(show.getShowName())) {
+						u.getCompleted().remove(x);
+					}
+				}
 				break;
 			case 2:
 				u.getInprogress().add(show);
+				for(int x=0;x<u.getPlanToWatch().size();x++) {
+					if(u.getPlanToWatch().get(x).getShowName().equals(show.getShowName())) {
+						u.getPlanToWatch().remove(x);
+					}
+				}
+				for(int x=0;x<u.getCompleted().size();x++) {
+					if(u.getCompleted().get(x).getShowName().equals(show.getShowName())) {
+						u.getCompleted().remove(x);
+					}
+				}
 				break;
 			case 3:
 				u.getCompleted().add(show);
+				for(int x=0;x<u.getPlanToWatch().size();x++) {
+					if(u.getPlanToWatch().get(x).getShowName().equals(show.getShowName())) {
+						u.getPlanToWatch().remove(x);
+					}
+				}
+				for(int x=0;x<u.getInprogress().size();x++) {
+					if(u.getInprogress().get(x).getShowName().equals(show.getShowName())) {
+						u.getInprogress().remove(x);
+					}
+				}
 				break;
 		
 		} 
