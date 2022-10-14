@@ -5,27 +5,35 @@ USE TV_DB;
 CREATE TABLE shows(
 showID int auto_increment,
 showName varchar(255),
-episodes int,
-runTime int,
+episodesTotal int,
+seasonsTotal int,
+runTimeTotal int,
 primary key (showID)
 );
 
-CREATE TABLE seasons(
-seasonsID int auto_increment,
-runTime int,
-amountOfEpisodes int,
-showID int,
-primary key (seasonsID),
-foreign key (showID) references shows(showID)
-);
+-- insert into
+
+-- CREATE TABLE seasons(
+-- seasonsID int auto_increment,
+-- runTime int,
+-- amountOfEpisodes int,
+-- showID int,
+-- primary key (seasonsID),
+-- foreign key (showID) references shows(showID)
+-- );
 
 CREATE TABLE episodes(
 episodesID int auto_increment,
+<<<<<<< HEAD
+episodeNumber int,
 episodeName varchar(250),
+seasonNumber int,
+=======
+episodeName varchar(255),
+>>>>>>> 42117d1de22a9753ac402bd4edb02ee0d26517d2
 runTime int,
-seasonsID int,
 primary key (episodesID),
-foreign key (seasonsID) references seasons(seasonsID)
+foreign key (showID) references shows(showID)
 );
 
 CREATE TABLE users(
@@ -48,5 +56,3 @@ usersID int,
 foreign key (showID) references shows(showID),
 foreign key (usersID) references users(usersID)
 );
-
-insert into shows(showName) values ("Naruto")
