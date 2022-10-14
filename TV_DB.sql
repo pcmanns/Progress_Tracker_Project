@@ -5,35 +5,27 @@ USE TV_DB;
 CREATE TABLE shows(
 showID int auto_increment,
 showName varchar(255),
-episodesTotal int,
-seasonsTotal int,
-runTimeTotal int,
+episodes int,
+runTime int,
 primary key (showID)
 );
 
--- insert into
-
--- CREATE TABLE seasons(
--- seasonsID int auto_increment,
--- runTime int,
--- amountOfEpisodes int,
--- showID int,
--- primary key (seasonsID),
--- foreign key (showID) references shows(showID)
--- );
+CREATE TABLE seasons(
+seasonsID int auto_increment,
+runTime int,
+amountOfEpisodes int,
+showID int,
+primary key (seasonsID),
+foreign key (showID) references shows(showID)
+);
 
 CREATE TABLE episodes(
 episodesID int auto_increment,
-<<<<<<< HEAD
-episodeNumber int,
-episodeName varchar(250),
-seasonNumber int,
-=======
 episodeName varchar(255),
->>>>>>> 42117d1de22a9753ac402bd4edb02ee0d26517d2
 runTime int,
+seasonsID int,
 primary key (episodesID),
-foreign key (showID) references shows(showID)
+foreign key (seasonsID) references seasons(seasonsID)
 );
 
 CREATE TABLE users(
@@ -56,3 +48,16 @@ usersID int,
 foreign key (showID) references shows(showID),
 foreign key (usersID) references users(usersID)
 );
+
+insert into shows(showName) values ("Naruto");
+insert into shows(showName) values ("She-Hulk");
+
+insert into users(userName,pass) values ("Chris","root");
+
+insert into planToWatch(showID,UsersID) values(2,2);
+select * from shows where showID = (Select showID from planToWatch where usersID = 1);
+select * from plantowatch left Join shows on plantowatch.showID=shows.showID; 
+ 
+select * from users;
+select * from shows;
+select * from plantowatch;
