@@ -19,15 +19,18 @@ public class Main {
 		String[] logininfo = Login.userDetails();
 
 		Users user;
-		
-		
+		ArrayList<Show> showList =new ArrayList<Show>();
 		Connection conn = ConnManagerWithProperties.getConnection();
 		
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from users");			
-
 			int id = verifyLogin(rs, logininfo);
+			
+			rs = stmt.executeQuery("select * from shows");
+			
+			showList=DatabaseHandler.getShows(rs);
+			
 			
 			//verify login
 			if(id!=-1)
@@ -35,10 +38,11 @@ public class Main {
 				//login phase passed
 				user= new Users(id);
 				System.out.println("login verified");
-				
-				for(Show s : user.getPlanToWatch())	{
-					System.out.println(s.getShowName());
-				}
+				displayAll(showList,user.getPlanToWatch(),user.getInprogress(),user.getCompleted());
+				changeStatus(user,showList);
+				displayPlanToWatch(user.getPlanToWatch());
+				displayInProgress(user.getInprogress());
+				displayCompleted(user.getCompleted());
 			}
 			else
 			{
@@ -46,9 +50,6 @@ public class Main {
 				// leave if next steps want to be out of above if()
 				System.out.println("invalid login");
 			}
-			
-			
-			
 			
 			conn.close();
 			
@@ -60,84 +61,57 @@ public class Main {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/* ------------------------- Functionality Helper Methods ------------------------------- */
-	
-	
-
-	
-	
-
-		
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
 	/*
 	 * Description: Master display method for Main page - Displays all shows and category it appears in
 	 */
 	public static void displayAll(ArrayList<Show> shows, ArrayList<Show> c1, ArrayList<Show> c2, ArrayList<Show> c3) {
 		
 		System.out.println("                                                    Planning To Watch         In-Progress         Completed");
-		System.out.println("--------------------------------------------------------------------------------------------------------------\n");
+		System.out.println("--------------------------------------------------------------------------------------------------------------");
 		
-		for(Show s : shows)
+		for(int x=0;x<shows.size();x++)
 		{
-			System.out.print("*  " + s);
-			
-			if(c1.contains(s))	//Category: Planning to Watch
-			{
+			Show s= shows.get(x);
+			System.out.print("*  " + s.getShowName());
+			boolean flag=true;
+			for(int a=0;a<c1.size();a++) {
+				if(c1.get(a).getShowName().equals(s.getShowName())) {   //Category: Plan To Watch
 				addSpace(50 - s.getShowName().length());
 				addSpace(6);
-				System.out.println("X");
+				System.out.print("X");
+				addSpace(49);
+				System.out.print("*");
+				flag=false;
+				}
 			}
-			else if(c2.contains(s))	//Category: In-Progress
-			{
-				addSpace(50 - s.getShowName().length());
-				addSpace(30);
-				System.out.println("X");
+			for(int a=0;a<c2.size();a++) {
+				if(c2.get(a).getShowName().equals(s.getShowName())) {   //Category: In-Progress
+					addSpace(50 - s.getShowName().length());
+					addSpace(30);
+					System.out.print("X");
+					addSpace(25);
+					System.out.print("*");
+					flag=false;
+				}
 			}
-			else if(c3.contains(s))	//Category: Completed
-			{
+			for(int a=0;a<c3.size();a++) {
+				if(c3.get(a).getShowName().equals(s.getShowName())) {   //Category: Completed
 				addSpace(50 - s.getShowName().length());
 				addSpace(49);
-				System.out.println("X");
+				System.out.print("X");
+				addSpace(6);
+				System.out.print("*");
+				flag=false;
+				}
 			}
-			else
-			{
-//				addSpace(50 - s.getShowName().length());
-//				System.out.println("Error: displayAll()");
+			if(flag) {
+				addSpace(50 - s.getShowName().length()+56);
+				System.out.print("*");
 			}
-			
+			System.out.println("\n--------------------------------------------------------------------------------------------------------------");
 		}
-		
-		System.out.println("\n--------------------------------------------------------------------------------------------------------------");
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/*
 	 * Description: Displays all shows for a user from the Plan To Watch Category
@@ -156,8 +130,6 @@ public class Main {
 		System.out.println("----------------------------------------------------------");
 	}
 	
-	
-	
 	/*
 	 * Description: Displays all shows for a user from the In-Progress Category
 	 */
@@ -174,8 +146,6 @@ public class Main {
 		
 		System.out.println("----------------------------------------------------------");
 	}
-	
-	
 	
 	/*
 	 * Description: Displays all shows for a user from the Completed Category
@@ -194,59 +164,30 @@ public class Main {
 		System.out.println("----------------------------------------------------------");
 	}
 	
-  public static void changeStatus(Users u,ArrayList<Show> ShowList) {
+  public static void changeStatus(Users u,ArrayList<Show> showList) {
+	  System.out.println("------------------- Shows -------------------");
+	  for(int x=0;x<showList.size();x++)
+		{
+			Show s= showList.get(x);
+			System.out.print("*\t"+(x+1)+".  " + s.getShowName());
+			addSpace(31 - s.getShowName().length());
+			if(x<9) {
+				System.out.print(" ");
+			}
+			System.out.println("*");
+		}
+	  System.out.println("---------------------------------------------");
+	  
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Picked Show Number");
-		int showNum = scan.nextInt();
+		int showNum = scan.nextInt()-1;
 		System.out.println("1.Plan to Watch");
 		System.out.println("2.In Progress");
 		System.out.println("3.Complete");
 		System.out.println("Set as:");
 		int c = scan.nextInt();
-		Show show =ShowList.get(showNum);
-		switch(c) {
-			case 1:
-				u.getPlanToWatch().add(show);
-				for(int x=0;x<u.getInprogress().size();x++) {
-					if(u.getInprogress().get(x).getShowName().equals(show.getShowName())) {
-						u.getInprogress().remove(x);
-					}
-				}
-				for(int x=0;x<u.getCompleted().size();x++) {
-					if(u.getCompleted().get(x).getShowName().equals(show.getShowName())) {
-						u.getCompleted().remove(x);
-					}
-				}
-				break;
-			case 2:
-				u.getInprogress().add(show);
-				for(int x=0;x<u.getPlanToWatch().size();x++) {
-					if(u.getPlanToWatch().get(x).getShowName().equals(show.getShowName())) {
-						u.getPlanToWatch().remove(x);
-					}
-				}
-				for(int x=0;x<u.getCompleted().size();x++) {
-					if(u.getCompleted().get(x).getShowName().equals(show.getShowName())) {
-						u.getCompleted().remove(x);
-					}
-				}
-				break;
-			case 3:
-				u.getCompleted().add(show);
-				for(int x=0;x<u.getPlanToWatch().size();x++) {
-					if(u.getPlanToWatch().get(x).getShowName().equals(show.getShowName())) {
-						u.getPlanToWatch().remove(x);
-					}
-				}
-				for(int x=0;x<u.getInprogress().size();x++) {
-					if(u.getInprogress().get(x).getShowName().equals(show.getShowName())) {
-						u.getInprogress().remove(x);
-					}
-				}
-				break;
-		
-		} 
-		u.Save();
+		Show show =showList.get(showNum);
+		u.changeStatus(c,show);
 	}
 	
 	
@@ -260,10 +201,6 @@ public class Main {
 			System.out.print(" ");
 		}
 	}
-	
-	
-	
-	
 	
 	
 	
