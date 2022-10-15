@@ -9,15 +9,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class DatabaseHandler {
+
 	public static ArrayList<Show> getShows(ResultSet rs) {
 		ArrayList<Show> showList= new ArrayList<Show>();
 		try {
-
+		
 			while(rs.next())
-			{				
+			{
 				showList.add(new Show(rs.getInt(1),rs.getString(2)));
 			}
-
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -25,9 +26,9 @@ public class DatabaseHandler {
 	}
 
 	public static boolean saveInProgress(ArrayList<Show> list,int userID) {
-
+		
 		Connection conn = ConnManagerWithProperties.getConnection();
-
+		
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.execute("delete from inProgress where usersId ="+userID);
@@ -38,13 +39,13 @@ public class DatabaseHandler {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		return false;
 	}
 	public static boolean savePlanToWatch(ArrayList<Show> list,int userID) {
-
+		
 		Connection conn = ConnManagerWithProperties.getConnection();
-
+		
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.execute("delete from planToWatch where usersId ="+userID);
@@ -55,13 +56,13 @@ public class DatabaseHandler {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		return false;
 	}
 	public static boolean saveComplete(ArrayList<Show> list,int userID) {
-
+		
 		Connection conn = ConnManagerWithProperties.getConnection();
-
+		
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.execute("delete from completed where usersId ="+userID);
@@ -72,7 +73,7 @@ public class DatabaseHandler {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		return false;
 	}
 

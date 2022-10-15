@@ -29,7 +29,6 @@ public class Users {
 			inprogress = DatabaseHandler.getShows(rs);
 			rs = stmt.executeQuery("select shows.showID , showName from completed Join shows on completed.showID=shows.showID where usersID ="+id+";");
 			completed = DatabaseHandler.getShows(rs);
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -40,9 +39,65 @@ public class Users {
 		DatabaseHandler.saveComplete(completed, id);
 		DatabaseHandler.saveInProgress(inprogress, id);
 		DatabaseHandler.savePlanToWatch(planToWatch, id);
-
-
 	}
+	
+	public void changeStatus(int c, Show show) {
+	switch(c) {
+	case 1:
+		this.getPlanToWatch().add(show);
+		for(int x=0;x<this.getInprogress().size();x++) {
+			if(this.getInprogress().get(x).getShowName().equals(show.getShowName())) {
+				this.getInprogress().remove(x);
+			}
+		}
+		for(int x=0;x<this.getCompleted().size();x++) {
+			if(this.getCompleted().get(x).getShowName().equals(show.getShowName())) {
+				this.getCompleted().remove(x);
+			}
+		}
+		break;
+	case 2:
+		this.getInprogress().add(show);
+		for(int x=0;x<this.getPlanToWatch().size();x++) {
+			if(this.getPlanToWatch().get(x).getShowName().equals(show.getShowName())) {
+				this.getPlanToWatch().remove(x);
+			}
+		}
+		for(int x=0;x<this.getCompleted().size();x++) {
+			if(this.getCompleted().get(x).getShowName().equals(show.getShowName())) {
+				this.getCompleted().remove(x);
+			}
+		}
+		break;
+	case 3:
+		this.getCompleted().add(show);
+		for(int x=0;x<this.getPlanToWatch().size();x++) {
+			if(this.getPlanToWatch().get(x).getShowName().equals(show.getShowName())) {
+				this.getPlanToWatch().remove(x);
+			}
+		}
+		for(int x=0;x<this.getInprogress().size();x++) {
+			if(this.getInprogress().get(x).getShowName().equals(show.getShowName())) {
+				this.getInprogress().remove(x);
+			}
+		}
+		break;
+
+	} 
+	this.Save();
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public int getId() {
 		return id;
@@ -51,6 +106,7 @@ public class Users {
 	public void setId(int id) {
 		this.id = id;
 	}
+
 
 	public String getUsername() {
 		return username;
@@ -68,13 +124,16 @@ public class Users {
 		this.planToWatch = planToWatch;
 	}
 
+
 	public ArrayList<Show> getInprogress() {
 		return inprogress;
 	}
 
+
 	public void setInprogress(ArrayList<Show> inprogress) {
 		this.inprogress = inprogress;
 	}
+
 
 	public ArrayList<Show> getCompleted() {
 		return completed;
@@ -84,6 +143,8 @@ public class Users {
 	public void setCompleted(ArrayList<Show> completed) {
 		this.completed = completed;
 	}
+
+
 
 	
 }
