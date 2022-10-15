@@ -39,9 +39,65 @@ public class Users {
 		DatabaseHandler.saveComplete(completed, id);
 		DatabaseHandler.saveInProgress(inprogress, id);
 		DatabaseHandler.savePlanToWatch(planToWatch, id);
-		
-		
 	}
+	
+	public void changeStatus(int c, Show show) {
+	switch(c) {
+	case 1:
+		this.getPlanToWatch().add(show);
+		for(int x=0;x<this.getInprogress().size();x++) {
+			if(this.getInprogress().get(x).getShowName().equals(show.getShowName())) {
+				this.getInprogress().remove(x);
+			}
+		}
+		for(int x=0;x<this.getCompleted().size();x++) {
+			if(this.getCompleted().get(x).getShowName().equals(show.getShowName())) {
+				this.getCompleted().remove(x);
+			}
+		}
+		break;
+	case 2:
+		this.getInprogress().add(show);
+		for(int x=0;x<this.getPlanToWatch().size();x++) {
+			if(this.getPlanToWatch().get(x).getShowName().equals(show.getShowName())) {
+				this.getPlanToWatch().remove(x);
+			}
+		}
+		for(int x=0;x<this.getCompleted().size();x++) {
+			if(this.getCompleted().get(x).getShowName().equals(show.getShowName())) {
+				this.getCompleted().remove(x);
+			}
+		}
+		break;
+	case 3:
+		this.getCompleted().add(show);
+		for(int x=0;x<this.getPlanToWatch().size();x++) {
+			if(this.getPlanToWatch().get(x).getShowName().equals(show.getShowName())) {
+				this.getPlanToWatch().remove(x);
+			}
+		}
+		for(int x=0;x<this.getInprogress().size();x++) {
+			if(this.getInprogress().get(x).getShowName().equals(show.getShowName())) {
+				this.getInprogress().remove(x);
+			}
+		}
+		break;
+
+	} 
+	this.Save();
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public int getId() {
 		return id;
