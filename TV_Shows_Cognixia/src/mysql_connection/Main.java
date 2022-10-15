@@ -33,23 +33,44 @@ public class Main {
 			
 			
 			//verify login
-			if(id!=-1)
-			{
-				//login phase passed
-				user= new Users(id);
-				System.out.println("login verified");
-				displayAll(showList,user.getPlanToWatch(),user.getInprogress(),user.getCompleted());
-				changeStatus(user,showList);
-				displayPlanToWatch(user.getPlanToWatch());
-				displayInProgress(user.getInprogress());
-				displayCompleted(user.getCompleted());
-			}
-			else
-			{
-				//re-do login or system.exit()
-				// leave if next steps want to be out of above if()
-				System.out.println("invalid login");
-			}
+
+				
+				while(id == -1)
+				{
+					try {
+						
+						throw new LoginException("\nCustom Exception: LoginException - This is not a valid login ...");
+						
+					} catch (LoginException e) {
+						
+						System.out.println(e.getMessage());
+						
+						Scanner scan = new Scanner(System.in);
+						System.out.println("\n\tWhat do you want to do?\n"
+								+ "1. Login\n2. Exit");
+						switch(scan.nextInt())
+						{
+						case 1:
+							logininfo = Login.userDetails();
+							id = verifyLogin(rs, logininfo);
+							break;
+							
+						case 2:
+							System.exit(0);
+							
+						}
+					}
+				}
+				
+				//login phase passed 
+				user= new Users(id); 
+				System.out.println("login verified"); 
+				displayAll(showList,user.getPlanToWatch(),user.getInprogress(),user.getCompleted()); 
+				changeStatus(user,showList); 
+				displayPlanToWatch(user.getPlanToWatch()); 
+				displayInProgress(user.getInprogress()); 
+				displayCompleted(user.getCompleted()); 
+
 			
 			conn.close();
 			
@@ -57,8 +78,24 @@ public class Main {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		
 	}
+		
+		
+		
+		
+
+		
+		
+		
+		
+		
+		
+		
 	
 	
 	/* ------------------------- Functionality Helper Methods ------------------------------- */
