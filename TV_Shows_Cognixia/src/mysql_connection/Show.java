@@ -23,8 +23,4 @@ public void setShowName(String showName) {
 }
 
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 17a0fa78cd3b57a020b19889b371d21a2d337f2d
