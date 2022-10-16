@@ -52,4 +52,4 @@ insert into users(userName,pass) values ("Chris","root"),("Disha","123"),("Patte
 
 insert into planToWatch(showID,UsersID) values(1,1),(6,1),(3,2),(4,2),(7,3),(8,3),(9,4),(2,4);
 insert into inProgress(showID,UsersID) values(3,1),(7,2),(3,3),(1,4);
-insert into completed(showID,UsersID) values(3,1),(2,2),(1,3),(4,4);
+insert into completed(showID,UsersID) values(4,1),(2,2),(1,3),(4,4);
