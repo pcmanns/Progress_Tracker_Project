@@ -1,5 +1,5 @@
 create database TV_DB;
-CREATE USER 'testuser' IDENTIFIED BY '123';
+
 USE TV_DB;
 
 CREATE TABLE shows(
@@ -48,27 +48,8 @@ foreign key (usersID) references users(usersID)
 insert into shows(showName) 
 values ("Naruto"),("She-Hulk"),("Andor"),("The Rings of Power"),("House of the Dragon"),("Stranger Things"),("Cyberpunk Edgerunners"),("Spongebob Squarepants"),("Rick and Morty"),("The Boys"),("Avatar the Last Airbender");
 
-alter table episodes drop foreign key episodes_ibfk_1;
-alter table episodes add showID int;
-ALTER TABLE episodes ADD FOREIGN KEY (showID) REFERENCES shows(showID) ON DELETE SET NULL;
-alter table episodes drop seasonsID;
-alter table userProgress rename to inProgress;
-drop table seasons;
-alter table shows drop episodes;
-alter table shows drop runTime;
-alter table shows modify showName varchar(250);
+insert into users(userName,pass) values ("Chris","root"),("Disha","123"),("Patterson","321"),("Parker","pass");
 
-alter table inprogress add showID int;
-alter table inprogress drop foreign key inprogress_ibfk_1;
-alter table inprogress add foreign key (showID) references shows(showID) on delete set null;
-alter table inprogress drop episodesID;
-
-insert into users(userName,pass) values ("Chris","root");
-
-insert into planToWatch(showID,UsersID) values(2,2);
-select * from shows where showID = (Select showID from planToWatch where usersID = 1);
-select * from plantowatch left Join shows on plantowatch.showID=shows.showID; 
- 
-select * from users;
-select * from shows;
-select * from plantowatch;
+insert into planToWatch(showID,UsersID) values(1,1),(6,1),(3,2),(4,2),(7,3),(8,3),(9,4),(2,4);
+insert into inProgress(showID,UsersID) values(3,1),(7,2),(3,3),(1,4);
+insert into completed(showID,UsersID) values(3,1),(2,2),(1,3),(4,4);
